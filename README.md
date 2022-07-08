@@ -18,3 +18,9 @@ then for starting react server, type
 > npm start
 
 Note - frontend should be running on port 3000 for frontend requests
+
+# Tech Stack Used - 
+Backend - DRF(Django Rest Framework)
+Frontend - Reactjs
+Design Libraries - Ant Design
+Features/Functionalities - CRUD, Filter, Sorting, Pagination, Loader, Responsive(mobile-frinedly).
