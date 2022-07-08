@@ -26,4 +26,4 @@ Frontend - Reactjs
 
 Design Libraries - Ant Design
 
-Features/Functionalities - CRUD, Filter, Sorting, Pagination, Loader, Responsive(mobile-frinedly).
+Features/Functionalities - CRUD, Search Bar, Filter, Sorting, Pagination, Loader, Responsive(mobile-frinedly).
