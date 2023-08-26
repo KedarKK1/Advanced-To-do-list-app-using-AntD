@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 from rest_framework import viewsets, generics, permissions
 
 from rest_framework.decorators import api_view
+=======
+from rest_framework import viewsets, generics
+from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view, permission_classes
+>>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import TaskSerializer, RegisterSerializer, UserSerializer, LoginSerializer
 from knox.models import AuthToken
@@ -9,7 +17,19 @@ from knox.models import AuthToken
 from .models import Task
 
 
+<<<<<<< HEAD
+=======
+    # """
+    # View to list all users in the system.
+    # * Requires token authentication.
+    # * Only admin users are able to access this view.
+    # """
+    # authentication_classes = [authentication.TokenAuthentication]
+
+
+>>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
 @api_view(['GET'])
+@permission_classes([AllowAny]) # * Use decorator called AllowAny for this route only. There are more decorators like renderer_classes, parser_classes, authentication_classes, throttle_classes. www.django-rest-framework.org/api-guide/views/
 def apiOverview(request):
     api_urls = {
         '---------------------------------': '---------------------------------',
@@ -37,12 +57,24 @@ def apiOverview(request):
 #     return Response(serializer.data)
 
 # @api_view(['GET'])
+
+class getmyAPI(GenericAPIView):
+    serializer_class = TaskSerializer
+
+    def get(self, request):
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+
 class taskList(viewsets.ViewSet):
     # tasks = TaskSerializer("")
     # serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]  # * REMOVE THIS LINE TO REMOVE AUTHENTICATION
 
     def list(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
+        # tasks = Task.objects.all()
+        tasks = Task.objects.filter(owner=request.user) # * REPLACE THIS LINE BY Task.objects.all() TO GET ALL TASKS LIST
         serializer = TaskSerializer(tasks, many=True)
         # tasks = self.get_queryset()
         # username = TaskSerializer.get_username(obj=tasks)
@@ -72,11 +104,15 @@ def taskDetail(request, pk):
 
 class taskCreateView(generics.GenericAPIView):
     serializer_class = TaskSerializer
+<<<<<<< HEAD
 
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
+=======
+    permission_classes = [IsAuthenticated] # REMOVE THIS LINE TO REMOVE AUTHENTICATION
+>>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
     def post(self, request, *args, **kwargs):
         serializer = TaskSerializer(data=request.data, context={
                                     "author": self.request.user})
