@@ -3,16 +3,16 @@ import { useState, useRef } from 'react';
 import FetchData from '../../components/FetchData';
 import { Switch } from 'antd';
 import { DatePicker, Space } from 'antd';
-import "antd/dist/antd.css"; //important to import this line otherwise it will not show antd css
+// import "antd/dist/antd.css"; //important to import this line otherwise it will not show antd css
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-var moment = require('moment');
+// var moment = require('moment');
 
 const Homepage2 = (props) => {
     const [todoMessage, setTodoMessage] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [isChecked, setIsChecked] = useState(true);
-    const [setDafaultDate, setSetDafaultDate] = useState(null);
-
+    // const [setDafaultDate, setSetDafaultDate] = useState(null);
+    const [setDafaultDate] = useState(null);
 
     const inputRef = useRef(null);
 

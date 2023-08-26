@@ -1,11 +1,13 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, permissions
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, RegisterSerializer, UserSerializer, LoginSerializer
+from knox.models import AuthToken
 
 from .models import Task
+
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -16,6 +18,11 @@ def apiOverview(request):
         'Create': '/task-create/',
         'Update': '/task-update/<str:pk>',
         'Delete': '/task-delete/<str:pk>',
+        'knox.urls':'api/auth/',
+        'SignUpAPI':'api/auth/register',
+        'SignInAPI':'api/auth/login',
+        'MainUser':'api/auth/user',
+        'knox-logout':'api/auth/logout',
     }
     return Response(api_urls)
 
@@ -66,6 +73,10 @@ def taskDetail(request, pk):
 class taskCreateView(generics.GenericAPIView):
     serializer_class = TaskSerializer
 
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
     def post(self, request, *args, **kwargs):
         serializer = TaskSerializer(data=request.data, context={
                                     "author": self.request.user})
@@ -96,3 +107,40 @@ def taskDelete(request, pk):
     task = Task.objects.get(id=pk)
     task.delete()
     return Response('Item deleteed successfully')
+
+
+class SignUpAPI(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token = AuthToken.objects.create(user)
+        return Response({
+            "users": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": token[1]
+        })
+
+
+class SignInAPI(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
+
+
+class MainUser(generics.RetrieveAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

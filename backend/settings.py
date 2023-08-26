@@ -73,17 +73,23 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-"http://localhost:3000",
-"http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
-CORS_ALLOW_ALL_ORIGINS=True
+CSRF_COOKIE_SECURE = False
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -136,6 +142,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'myadvancedbdb',
+#         'USER': 'admin',
+#         'PASSWORD': 'admin#1234',
+#         'HOST': 'advanced-todolist-db.cd31js5mczld.ap-south-1.rds.amazonaws.com',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation

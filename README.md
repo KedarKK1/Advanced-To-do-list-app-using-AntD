@@ -1,3 +1,26 @@
+# Screenshots
+
+1. search functionality
+<img src="./Screenshots/ss1.gif" alt="search functionality">
+
+2. sort, filter functionality
+<img src="./Screenshots/ss2.gif" alt="sort, filter functionality">
+
+3. Edit functionality
+<img src="./Screenshots/ss23.PNG" alt="edit functionality">
+
+4. APIs list
+<img src="./Screenshots/ss24.PNG" alt="API list">
+
+<!-- 3. Add task functionality
+<img src="./Screenshots/ss3.gif" alt="Add task functionality">
+
+4. edit task functionality
+<img src="./Screenshots/ss4.gif" alt="edit task functionality">
+
+5. Delete task functionality
+<img src="./Screenshots/ss5.gif" alt="delete task functionality"> -->
+
 # For Running Backend
 
 in this very same folder

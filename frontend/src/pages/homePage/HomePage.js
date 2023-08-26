@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import FetchData from '../../components/FetchData';
 import { Layout, Typography, Row, Col, Input, Select, Tag, Table, Button, Modal, Form, } from 'antd';
 import { DatePicker, Space } from 'antd';
-import "antd/dist/antd.css"; //important to import this line otherwise it will not show antd css
 import { Content } from 'antd/lib/layout/layout';
 import TextArea from 'antd/lib/input/TextArea';
 import { Option } from 'antd/lib/mentions';
@@ -18,10 +17,11 @@ const HomePage = (props) => {
     const [todoTags, setTodoTags] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [isChecked, setIsChecked] = useState('OPEN');
-    const [setDafaultDate, setSetDafaultDate] = useState(null);
+    // const [setDafaultDate, setSetDafaultDate] = useState(null);
+    const [setDafaultDate] = useState(null);
     const [getData, setGetData] = useState('')
     const [tobeDeleted, setTobeDeleted] = useState(0);
-    const [isModalVisible, setIsModalVisible ] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
     const inputRef = useRef(null);
@@ -77,7 +77,10 @@ const HomePage = (props) => {
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(obj),
+            xsrfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFTOKEN',
+            withCredentials: true
         }).then(response => {
             <FetchData />
             window.location.reload();
@@ -88,9 +91,9 @@ const HomePage = (props) => {
         setTobeDeleted(e);
         // console.log(tobeDeleted);
         setIsModalVisible(true);
-      };
-    
-      const handleOk = (e) => {
+    };
+
+    const handleOk = (e) => {
         // console.log(e)
         var url = `http://127.0.0.1:8000/task-delete/${e}/`
         fetch(url, {
@@ -100,11 +103,11 @@ const HomePage = (props) => {
             window.location.reload();
         })
         setIsModalVisible(false);
-      };
-    
-      const handleCancel = () => {
+    };
+
+    const handleCancel = () => {
         setIsModalVisible(false);
-      };
+    };
 
 
     const columns = [
@@ -117,7 +120,8 @@ const HomePage = (props) => {
             title: 'Title',
             dataIndex: 'Title',
             key: 'Title',
-            render: (text) => <a>{text}</a>,
+            // render: (text) => <a>{text}</a>,
+            render: (text) => <>{text}</>,
             // defaultSortOrder: 'descend',
             sorter: (a, b) => a.Title.localeCompare(b.Title),
         },
@@ -135,24 +139,24 @@ const HomePage = (props) => {
             key: 'status',
             filters: [
                 {
-                  text: 'OPEN',
-                  value: 'OPEN',
+                    text: 'OPEN',
+                    value: 'OPEN',
                 },
                 {
-                  text: 'WORKING',
-                  value: 'WORKING',
+                    text: 'WORKING',
+                    value: 'WORKING',
                 },
                 {
                     text: 'DONE',
                     value: 'DONE',
-                  },
-                  {
+                },
+                {
                     text: 'OVERDUE',
                     value: 'OVERDUE',
-                  },
-              ],
-              onFilter: (value, record) => record.status.indexOf(value) === 0,
-          
+                },
+            ],
+            onFilter: (value, record) => record.status.indexOf(value) === 0,
+
         },
         {
             title: 'Description',
@@ -211,14 +215,15 @@ const HomePage = (props) => {
         },
     ];
 
-    const getIt = new Array();
+    // const getIt = new Array();
+    const getIt = [];
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/task-list/')
             .then(res => {
                 setIsLoading(true);
                 setGetData(res.data)
-                let v = res.data
+                // let v = res.data
                 // console.log(res.data)
                 // function storeItToArray(v) {
                 //     v.getData.forEach((item,index)=>{
@@ -255,32 +260,31 @@ const HomePage = (props) => {
 
     // const tags2 = new Array(getData[i].tag.split(','))
     // console.log(tags2)
-    for(let i=0;i<getData.length;i++)
-    {
+    for (let i = 0; i < getData.length; i++) {
         getIt.push(
             {
-            index:i+1,
-            key:`${i+1}`,
-            status: getData[i].complete,
-            Title: getData[i].title,
-            duedate: (getData[i].birthdayDate),
-            // duedate: <DatePicker defaultValue={moment(getData[i].birthdayDate)} />,
-            // date: (getData[i].created_at),
-            date: (getData[i].created_at),
-            Description: getData[i].description,            
-            tags: getData[i].tag.split(','),
-            action:             
-                <Space size="middle">
-                    {/* <a>Status: {record.status}</a> */}
-                    <Link to={`/editPage/${getData[i].id}`}>Edit</Link >
-                    <Button danger onClick={()=>showModal(getData[i].id)} >Delete</Button>
-                    <Modal title="Delete" visible={isModalVisible} onOk={()=>{handleOk(tobeDeleted)}} onCancel={handleCancel} okText="Delete" okType="danger" cancelText="Cancel">
-                        <p>Are You Sure you want to delete this record?</p>
-                    </Modal>
-                </Space>
-        },
+                index: i + 1,
+                key: `${i + 1}`,
+                status: getData[i].complete,
+                Title: getData[i].title,
+                duedate: (getData[i].birthdayDate),
+                // duedate: <DatePicker defaultValue={moment(getData[i].birthdayDate)} />,
+                // date: (getData[i].created_at),
+                date: (getData[i].created_at),
+                Description: getData[i].description,
+                tags: getData[i].tag.split(','),
+                action:
+                    <Space size="middle">
+                        {/* <a>Status: {record.status}</a> */}
+                        <Link to={`/editPage/${getData[i].id}`}>Edit</Link >
+                        <Button danger onClick={() => showModal(getData[i].id)} >Delete</Button>
+                        <Modal title="Delete" visible={isModalVisible} onOk={() => { handleOk(tobeDeleted) }} onCancel={handleCancel} okText="Delete" okType="danger" cancelText="Cancel">
+                            <p>Are You Sure you want to delete this record?</p>
+                        </Modal>
+                    </Space>
+            },
         )
-       
+
     }
 
     // console.log(getIt)
@@ -288,29 +292,28 @@ const HomePage = (props) => {
     const onChangeSortFilter = (pagination, filters, sorter, extra) => {
         // console.log('params', pagination, filters, sorter, extra);
         console.log('onChangeSortFilter was called');
-      };
+    };
 
-      const [search, setSearch] = useState('');
+    const [search, setSearch] = useState('');
     //   console.log(getIt)
-      const [mydataSource, setmydataSource] = useState(getIt)
-      const [tablefilter, setTablefilter] = useState([])
+    const [mydataSource, setmydataSource] = useState(getIt)
+    const [tablefilter, setTablefilter] = useState([])
 
-      const filterData = (e) => {
-        if(e.target.value != "" )
-        {
+    const filterData = (e) => {
+        if (e.target.value !== "") {
             // you have to include below line else it shows mydataSource as mpty array
             setmydataSource(getIt)
-            setSearch(e.target.value); 
+            setSearch(e.target.value);
             // console.log(mydataSource)
-            const filterTable = mydataSource.filter(o=>Object.keys(o).some(k=>
+            const filterTable = mydataSource.filter(o => Object.keys(o).some(k =>
                 String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())
             ))
             setTablefilter([...filterTable])
-        } else{
-            setSearch(e.target.value); 
+        } else {
+            setSearch(e.target.value);
             setmydataSource([...mydataSource]);
         }
-      }
+    }
 
     return (
         <Layout>
@@ -331,9 +334,9 @@ const HomePage = (props) => {
 
                             <Col xxl={1} xl={1} lg={1} md={1} sm={4} xs={4} />
                             <Col xxl={8} xl={8} lg={8} md={8} sm={16} xs={16} >
-                            <Form.Item label="Description" name="Description" rules={[{ required: true, message: 'Please Enter Title' }]}>
-                                <TextArea showCount rows={1} maxLength={1000} ref={descriptionRef} value={todoDescription} onChange={handleChange3} placeholder="Enter Description" />
-                            </Form.Item>
+                                <Form.Item label="Description" name="Description" rules={[{ required: true, message: 'Please Enter Title' }]}>
+                                    <TextArea showCount rows={1} maxLength={1000} ref={descriptionRef} value={todoDescription} onChange={handleChange3} placeholder="Enter Description" />
+                                </Form.Item>
                             </Col>
                             <Col xxl={1} xl={1} lg={1} md={1} sm={4} xs={4} />
 
@@ -346,14 +349,14 @@ const HomePage = (props) => {
                                 {/* here dont use for instead use htmlFor as in react like className */}
                                 {/* <label htmlFor="isComplete">Is Complete : </label>
                                         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={isChecked} value={isChecked} onChange={handleChange3} /> */}
-                            <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'Please Select Status' }]}>
+                                <Form.Item label="Status" name="Status" rules={[{ required: true, message: 'Please Select Status' }]}>
                                     <Select defaultValue={isChecked} onChange={(value) => { setIsChecked(value) }} style={{ width: "100%", }} >
                                         <Option value="OPEN">OPEN</Option>
                                         <Option value="WORKING">WORKING</Option>
                                         <Option value="DONE">DONE</Option>
                                         <Option value="OVERDUE">OVERDUE</Option>
                                     </Select>
-                            </Form.Item>
+                                </Form.Item>
                             </Col>
                             <Col xxl={1} xl={1} lg={1} md={1} sm={4} xs={4} />
 
@@ -389,8 +392,8 @@ const HomePage = (props) => {
                     <hr />
 
                     <Title align="center">Your Tasks list is : </Title>
-                    <Row style={{ margin:"5px"}}>
-                        <Col xxl={15} xl={15} lg={15} md={15} sm={4} xs={4}  />
+                    <Row style={{ margin: "5px" }}>
+                        <Col xxl={15} xl={15} lg={15} md={15} sm={4} xs={4} />
                         <Col xxl={9} xl={9} lg={9} md={9} sm={20} xs={20} >
                             <Input showCount maxLength={100} onChange={filterData} value={search} placeholder="🔍 Seach Queries " />
                         </Col>
@@ -398,7 +401,7 @@ const HomePage = (props) => {
                     {/* <Table style={{ width: '100', overflow: 'scroll', }} columns={columns} dataSource={getIt} onChange={onChangeSortFilter}  /> */}
                     <Table style={{ width: '100', overflow: 'scroll', }} columns={columns} dataSource={
                         search.length > 0 ? tablefilter : getIt
-                    } onChange={onChangeSortFilter}  />
+                    } onChange={onChangeSortFilter} />
 
                 </Content>
             )}

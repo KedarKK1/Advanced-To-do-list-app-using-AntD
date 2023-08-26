@@ -1,12 +1,12 @@
 import { Button, Col, DatePicker, Form, Input, Layout, Row, Select, Space } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import { Content } from 'antd/lib/layout/layout'
-import { Option } from 'antd/lib/mentions'
+// import { Option } from 'antd/lib/mentions'
 import Title from 'antd/lib/skeleton/Title'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import FetchData from '../../components/FetchData'
+// import FetchData from '../../components/FetchData'
 import axios from 'axios'
 import { useParams } from "react-router-dom";
 var moment = require('moment');
@@ -15,9 +15,9 @@ const EditPage = () => {
 
     let { id } = useParams();
 
-    const [getData, setGetData] = useState('')
-    const [tobeDeleted, setTobeDeleted] = useState(0);
-    const [isModalVisible, setIsModalVisible ] = useState(false)
+    // const [getData, setGetData] = useState('')
+    // const [tobeDeleted, setTobeDeleted] = useState(0);
+    // const [isModalVisible, setIsModalVisible ] = useState(false)
     const [todoMessage, setTodoMessage] = useState('');
     const [todoDescription, setTodoDescription] = useState('');
     const [todoTags, setTodoTags] = useState('');
@@ -57,8 +57,41 @@ const EditPage = () => {
             .catch(err => {
                 console.log("error caught", err)
             })
-      }, [])
-      
+      }, [id])
+
+
+    //   useEffect(() => {
+    //     // const data = await axios.get(`http://127.0.0.1:8000/task-detail/${id}/`)
+    //     //     .then(res => {
+    //     //         setGetData(res.data)
+    //     //         // console.log(res.data)
+    //     //         // setTodoMessage(res.data.title)
+    //     //         // setTodoDescription(res.data.description)
+    //     //         // setSetDafaultDate(res.data.birthdayDate)
+    //     //         // setTodoTags(res.data.tag)
+    //     //         // setIsChecked(res.data.complete)
+    //     //         // setTodoMessage(res.data.title)
+    //     //     })
+    //     //     todoDescription(data.description)
+    //         async function getMyData() {
+    //             setIsLoading(true)
+    //             const mydata = await axios.get(`http://127.0.0.1:8000/task-detail/${id}/`)
+    //             // setGetData(mydata.data)
+    //             // console.log(mydata.data.title)
+    //             // console.log(mydata.data)
+    //             setTodoMessage(mydata.data.title)
+    //             setTodoDescription(mydata.data.description)
+    //             setSetDafaultDate(moment(mydata.data.birthdayDate))
+    //             setTodoTags(mydata.data.tag)
+    //             setIsChecked(mydata.data.complete)
+    //             setIsLoading(false)
+    //         }
+    //         getMyData()
+
+    //         .catch(err => {
+    //             console.log("error caught", err)
+    //         })
+    //   }, [])
 
     const handleChange = (e) => {
         // console.log(e.target.value);

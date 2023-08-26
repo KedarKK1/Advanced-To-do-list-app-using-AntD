@@ -1,5 +1,6 @@
 // import FetchData from './components/FetchData';
-import "antd/dist/antd.css"; //important to import this line otherwise it will not show antd css
+// import "antd/dist/antd.css"; //important to import this line otherwise it will not show antd css
+import "antd/dist/antd.min.css"; //important to import this line otherwise it will not show antd css
 import HomePage from './pages/homePage/HomePage';
 import Homepage2 from './pages/homePage/Homepage2';
 import { Routes, Route } from 'react-router-dom';
