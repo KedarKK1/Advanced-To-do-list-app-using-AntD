@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 from rest_framework import viewsets, generics, permissions
 
 from rest_framework.decorators import api_view
-=======
-from rest_framework import viewsets, generics
-from rest_framework.generics import GenericAPIView
-from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import api_view, permission_classes
->>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -16,9 +9,6 @@ from knox.models import AuthToken
 
 from .models import Task
 
-
-<<<<<<< HEAD
-=======
     # """
     # View to list all users in the system.
     # * Requires token authentication.
@@ -26,8 +16,6 @@ from .models import Task
     # """
     # authentication_classes = [authentication.TokenAuthentication]
 
-
->>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
 @api_view(['GET'])
 @permission_classes([AllowAny]) # * Use decorator called AllowAny for this route only. There are more decorators like renderer_classes, parser_classes, authentication_classes, throttle_classes. www.django-rest-framework.org/api-guide/views/
 def apiOverview(request):
@@ -104,15 +92,11 @@ def taskDetail(request, pk):
 
 class taskCreateView(generics.GenericAPIView):
     serializer_class = TaskSerializer
-<<<<<<< HEAD
 
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-=======
-    permission_classes = [IsAuthenticated] # REMOVE THIS LINE TO REMOVE AUTHENTICATION
->>>>>>> 8a9735b893b5e416f23cde3754aa272411241ba0
     def post(self, request, *args, **kwargs):
         serializer = TaskSerializer(data=request.data, context={
                                     "author": self.request.user})
